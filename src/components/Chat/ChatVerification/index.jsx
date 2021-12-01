@@ -9,7 +9,7 @@ import {
 
 export default function ChatVerification({ error }) {
   const { currentUser, setIsLoading } = useAuthentication();
-  const { selectedChat, setSelectedChat } = useChats();
+  const { selectedChat, closeChat } = useChats();
 
   const startChat = () => {
     setIsLoading(true);
@@ -22,10 +22,6 @@ export default function ChatVerification({ error }) {
       .finally(() => setIsLoading(false));
   }
 
-  const cancelChat = () => {
-    setSelectedChat(undefined);
-  }
-
   return (
     <ChatError>
       <h3>{error}</h3>
@@ -36,7 +32,7 @@ export default function ChatVerification({ error }) {
         <button onClick={startChat} className="rounded text-base mr-1 bg-blue-400 h-8 w-16 text-white hover:bg-blue-500 hover:text-white focus:outline-none" type="button">
           Sim
         </button>
-        <button onClick={cancelChat} className="rounded text-base ml-1 bg-red-400 h-8 w-20 text-white hover:bg-red-500 hover:text-white focus:outline-none" type="button">
+        <button onClick={closeChat} className="rounded text-base ml-1 bg-red-400 h-8 w-20 text-white hover:bg-red-500 hover:text-white focus:outline-none" type="button">
           Cancelar
         </button>
       </div>

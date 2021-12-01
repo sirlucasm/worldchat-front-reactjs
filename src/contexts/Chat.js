@@ -7,6 +7,11 @@ export default function ChatsProvider({ children }) {
   const [friendships, setFriendships] = useState([]);
   const [roomUsers, setRoomUsers] = useState([]);
   const [selectedChat, setSelectedChat] = useState();
+  const [chatMessages, setChatMessages] = useState();
+
+  const closeChat = () => {
+    setSelectedChat(undefined);
+  }
 
   return (
     <ChatsContext.Provider value={{
@@ -17,7 +22,10 @@ export default function ChatsProvider({ children }) {
       roomUsers,
       setRoomUsers,
       selectedChat,
-      setSelectedChat
+      setSelectedChat,
+      chatMessages,
+      setChatMessages,
+      closeChat
     }}>
       {children}
     </ChatsContext.Provider>
@@ -33,7 +41,10 @@ export function useChats() {
     roomUsers,
     setRoomUsers,
     selectedChat,
-    setSelectedChat
+    setSelectedChat,
+    chatMessages,
+    setChatMessages,
+    closeChat
   } = useContext(ChatsContext);
   return {
     chats,
@@ -43,6 +54,9 @@ export function useChats() {
     roomUsers,
     setRoomUsers,
     selectedChat,
-    setSelectedChat
+    setSelectedChat,
+    chatMessages,
+    setChatMessages,
+    closeChat
   };
 }

@@ -31,7 +31,7 @@ export const ChatContent = styled.div`
   flex-direction: column;
   padding: 8px 20px;
   overflow-y: auto;
-  &.me {
+  .me {
     background-color: rgb(24, 102, 167);
     align-self: flex-end;
     span {
