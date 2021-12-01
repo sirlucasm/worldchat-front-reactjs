@@ -14,30 +14,7 @@ export default function AuthenticationProvider({ children }) {
     }
   }, [authenticated]);
 
-  return (
-    <AuthenticationContext.Provider value={{
-      authenticated,
-      setAuthenticated,
-      currentUser,
-      setCurrentUser,
-      isLoading,
-      setIsLoading
-    }}>
-      {children}
-    </AuthenticationContext.Provider>
-  );
-}
-
-export function useAuthentication() {
-  const {
-    authenticated,
-    setAuthenticated,
-    currentUser,
-    setCurrentUser,
-    isLoading,
-    setIsLoading
-  } = useContext(AuthenticationContext);
-  return {
+  const props = {
     authenticated,
     setAuthenticated,
     currentUser,
@@ -45,4 +22,14 @@ export function useAuthentication() {
     isLoading,
     setIsLoading
   };
+
+  return (
+    <AuthenticationContext.Provider value={props}>
+      {children}
+    </AuthenticationContext.Provider>
+  );
+}
+
+export function useAuthentication() {
+  return useContext(AuthenticationContext);
 }

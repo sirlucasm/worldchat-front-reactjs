@@ -13,50 +13,27 @@ export default function ChatsProvider({ children }) {
     setSelectedChat(undefined);
   }
 
+  const props = {
+    chats,
+    setChats,
+    friendships,
+    setFriendships,
+    roomUsers,
+    setRoomUsers,
+    selectedChat,
+    setSelectedChat,
+    chatMessages,
+    setChatMessages,
+    closeChat
+  }
+
   return (
-    <ChatsContext.Provider value={{
-      chats,
-      setChats,
-      friendships,
-      setFriendships,
-      roomUsers,
-      setRoomUsers,
-      selectedChat,
-      setSelectedChat,
-      chatMessages,
-      setChatMessages,
-      closeChat
-    }}>
+    <ChatsContext.Provider value={props}>
       {children}
     </ChatsContext.Provider>
   );
 }
 
 export function useChats() {
-  const {
-    chats,
-    setChats,
-    friendships,
-    setFriendships,
-    roomUsers,
-    setRoomUsers,
-    selectedChat,
-    setSelectedChat,
-    chatMessages,
-    setChatMessages,
-    closeChat
-  } = useContext(ChatsContext);
-  return {
-    chats,
-    setChats,
-    friendships,
-    setFriendships,
-    roomUsers,
-    setRoomUsers,
-    selectedChat,
-    setSelectedChat,
-    chatMessages,
-    setChatMessages,
-    closeChat
-  };
+  return useContext(ChatsContext);
 }
