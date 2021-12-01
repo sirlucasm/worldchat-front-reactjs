@@ -5,7 +5,7 @@ class RoomUserService {
     this.API = API;
   }
 
-  async createRoom (params) {
+  async enterInRoom (params) {
     return (await this.API.post('room-users', params)).data;
   }
 
