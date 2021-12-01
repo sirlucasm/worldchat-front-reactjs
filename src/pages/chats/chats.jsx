@@ -9,14 +9,14 @@ import {
 import UserService from "../../services/UserService";
 import Menu from "../../components/Menu";
 import ChatList from "../../components/ChatList";
-import ChatService from "../../services/ChatService";
 import FriendshipService from "../../services/FriendshipService";
 import RoomUserService from "../../services/RoomUserService";
+import Chat from "../../components/Chat";
 
 
 export default function Chats() {
   const { setCurrentUser, setIsLoading } = useAuthentication();
-  const { setChats, setFriendships, setRoomUsers } = useChats();
+  const { setFriendships, setRoomUsers } = useChats();
 
   useEffect(() => {
     const user = Cookies.get('user');
@@ -25,13 +25,6 @@ export default function Chats() {
       setIsLoading(true);
       UserService.currentUser(stored)
         .then(_currentUser => setCurrentUser(_currentUser))
-        .finally(() => setIsLoading(false));
-    }
-
-    const fetchChats = async () => {
-      setIsLoading(true);
-      ChatService.all()
-        .then(_chats => setChats(_chats))
         .finally(() => setIsLoading(false));
     }
 
@@ -50,15 +43,15 @@ export default function Chats() {
     }
 
     fetchCurrentUser(user);
-    fetchChats();
     fetchFriendships(user);
     fetchRoomUsers(user);
-  }, [setChats, setCurrentUser, setFriendships, setIsLoading, setRoomUsers]);
+  }, [setCurrentUser, setFriendships, setIsLoading, setRoomUsers]);
 
   return (
     <ChatGrid>
       <Menu />
       <ChatList />
+      <Chat />
     </ChatGrid>
   );
 }
