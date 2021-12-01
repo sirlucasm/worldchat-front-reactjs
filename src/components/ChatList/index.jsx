@@ -14,8 +14,8 @@ import { useChats } from "../../contexts/Chat";
 import router from 'next/router';
 
 export default function ChatList() {
-  const { currentUser, setIsLoading, isLoading } = useAuthentication();
-  const { chats, friendships, roomUsers, selectedChat, setSelectedChat } = useChats();
+  const { currentUser, isLoading } = useAuthentication();
+  const { friendships, roomUsers, setSelectedChat } = useChats();
 
   const showFriendshipInfo = (friendship, key) => {
     if (friendship.toUser.id != currentUser.id) {

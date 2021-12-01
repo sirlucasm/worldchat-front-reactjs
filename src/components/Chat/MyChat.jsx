@@ -5,7 +5,6 @@ import {
   BorderInput,
   ChatContent,
   ChatHeader,
-  ChatMessage,
 } from './styled';
 import { useChats } from '../../contexts/Chat';
 import { useAuthentication } from '../../contexts/Authentication';
@@ -13,13 +12,16 @@ import { useEffect, useState, useRef } from 'react';
 import ChatService from '../../services/ChatService';
 import ChatMessageService from '../../services/ChatMessageService';
 import ChatVerification from "./ChatVerification";
+import FriendshipChat from "./friendship";
+import RoomChat from "./room";
+import RoomMessageService from "../../services/RoomMessageService";
 
 export default function MyChat() {
   const chatContentRef = useRef(null);
   const messageRef = useRef(null);
   const [error, setError] = useState();
   const { setIsLoading, currentUser } = useAuthentication();
-  const { selectedChat, setChats, setChatMessages, chatMessages, closeChat, chats } = useChats();
+  const { selectedChat, setChats, setChatMessages, chatMessages, closeChat, chats, setRoomMessages } = useChats();
   const [message, setMessage] = useState();
 
   const scrollToBottom = () => {
@@ -35,21 +37,36 @@ export default function MyChat() {
   }
 
   const fetchChatMessages = (chat) => {
-    setIsLoading(true);
     ChatMessageService.messages({ chatId: chat[0].id })
-      .then(_messages => setChatMessages(_messages))
+      .then(_messages => setChatMessages(_messages));
+  }
+
+  const fetchRoomMessages = () => {
+    RoomMessageService.messagesByRoom({ roomId: selectedChat.chat.room.id })
+      .then(_roomMessages => setRoomMessages(_roomMessages))
+      .catch(_ => _)
       .finally(() => setIsLoading(false));
   }
 
   const sendMessage = async () => {
     if (canSendMessage()) {
-      const params = {
-        user: { id: currentUser.id },
-        chat: { id: chats[0].id },
-        message
-      };
-      await ChatMessageService.sendMessage(params);
-      fetchChatMessages(chats);
+      if (selectedChat.type === 'friendship') {
+        const params = {
+          user: { id: currentUser.id },
+          chat: { id: chats[0].id },
+          message
+        };
+        await ChatMessageService.sendMessage(params);
+        fetchChatMessages(chats);
+      } else {
+        const params = {
+          user: { id: currentUser.id },
+          room: { id: selectedChat.chat.room.id },
+          message
+        };
+        await RoomMessageService.sendMessage(params);
+        fetchRoomMessages();
+      }
       messageRef.current.value = '';
     }
   }
@@ -71,10 +88,17 @@ export default function MyChat() {
           })
           .catch(error => setError(error.response.data.message))
           .finally(() => setIsLoading(false));
+      } else {
+        fetchRoomMessages();
       }
     }
     fetchChats(user);
-    setInterval(() => fetchChats(user), 6500);
+    const interval = setInterval(() => fetchChats(user), 6000);
+
+    return () => {
+      closeChat();
+      clearInterval(interval);
+    }
   }, []);
 
   return (
@@ -97,11 +121,10 @@ export default function MyChat() {
             </ChatHeader>
             <ChatContent className="scroll-design" ref={chatContentRef}>
               {
-                chatMessages?.map((chatMessage, key) => (
-                  <ChatMessage key={key} className={chatMessage.user.id == currentUser.id ? 'me' : ''}>
-                    <span>{ chatMessage.message }</span>
-                  </ChatMessage>
-                ))
+                selectedChat.type == 'friendship' ?
+                  <FriendshipChat />
+                  :
+                  <RoomChat />
               }
             </ChatContent>
             <div>

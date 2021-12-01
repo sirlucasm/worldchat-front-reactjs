@@ -52,6 +52,15 @@ export const ChatMessage = styled.div`
   span {
     font-size: .97rem;
   }
+  position: relative;
+  cursor: default;
+`;
+
+export const UsernameOnMessage = styled.div`
+  position: absolute;
+  top: -18px;
+  left: 7px;
+  font-size: 13px;
 `;
 
 export const BorderInput = styled.div`
