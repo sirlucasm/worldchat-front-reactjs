@@ -6,6 +6,7 @@ const AuthenticationContext = createContext();
 export default function AuthenticationProvider({ children }) {
   const [authenticated, setAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!authenticated) {
@@ -18,7 +19,9 @@ export default function AuthenticationProvider({ children }) {
       authenticated,
       setAuthenticated,
       currentUser,
-      setCurrentUser
+      setCurrentUser,
+      isLoading,
+      setIsLoading
     }}>
       {children}
     </AuthenticationContext.Provider>
@@ -30,12 +33,16 @@ export function useAuthentication() {
     authenticated,
     setAuthenticated,
     currentUser,
-    setCurrentUser
+    setCurrentUser,
+    isLoading,
+    setIsLoading
   } = useContext(AuthenticationContext);
   return {
     authenticated,
     setAuthenticated,
     currentUser,
-    setCurrentUser
+    setCurrentUser,
+    isLoading,
+    setIsLoading
   };
 }

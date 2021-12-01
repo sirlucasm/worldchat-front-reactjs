@@ -13,8 +13,9 @@ class ChatService {
     return (await this.API.get('chats')).data;
   }
 
-  async myChats (params) {
-    return (await this.API.get('chats/my/' + this.stored.id + '/' + params.toUserId)).data;
+  async myChats (currentUser, params) {
+    var stored = JSON.parse(currentUser);
+    return (await this.API.get('chats/my/' + stored.id + '/' + params.toUserId)).data;
   }
 
   async deleteChat (params) {

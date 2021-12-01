@@ -1,12 +1,8 @@
 import API from '../settings/axios';
-import Cookie from 'js-cookie';
-
-const current_user_stored = Cookie.get('user');
 
 class UserService {
   constructor () {
     this.API = API;
-    this.stored = current_user_stored && JSON.parse(current_user_stored);
   }
 
   async createAccount (params) {
@@ -15,8 +11,8 @@ class UserService {
     return user;
   }
 
-  async currentUser (params) {
-    var stored = JSON.parse(params);
+  async currentUser (currentUser) {
+    var stored = JSON.parse(currentUser);
     return (await this.API.get('users/' + stored.id)).data;
   }
 
