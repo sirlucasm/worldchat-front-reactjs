@@ -40,6 +40,7 @@ export const NoContent = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  height: 30vh;
   span {
     font-size: 17px;
     letter-spacing: 1px;

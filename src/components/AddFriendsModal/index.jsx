@@ -1,4 +1,3 @@
-import router from 'next/router';
 import { useRef, useState } from 'react';
 import Toast from "../Toast";
 import Modal from 'react-modal';
@@ -17,12 +16,13 @@ import {
 } from './styled';
 import { useAuthentication } from '../../contexts/Authentication';
 
-export default function AddFriendsModal({ isOpen, closeModal,  }) {
+export default function AddFriendsModal({ isOpen, closeModal, }) {
   const usernameSearchRef = useRef();
   const { currentUser } = useAuthentication();
   const [searchQuery, setSearchQuery] = useState();
   const [users, setUsers] = useState([]);
   const [toastMessage, setToastMessage] = useState();
+  const [toastError, setToastError] = useState();
 
   const content = {
     top: '50%',
@@ -42,16 +42,24 @@ export default function AddFriendsModal({ isOpen, closeModal,  }) {
   }
 
   const addFriend = (user) => {
-    FriendshipService.createFriendship({
-      sendedBy: { id: currentUser.id, },
-      toUser: { id: user.id }
-    })
-      .then(() => {
-        setToastMessage(`Solicitação enviada para ${user.username}`);
-        usernameSearchRef.current.value = '';
-        setSearchQuery();
+    FriendshipService.findFriendshipByUserId({ id: user.id, currentUser: currentUser.id })
+      .then((friend) => {
+        if (!friend) {
+          FriendshipService.createFriendship({
+            sendedBy: { id: currentUser.id, },
+            toUser: { id: user.id }
+          })
+            .then(() => {
+              setToastMessage(`Solicitação enviada para ${user.username}`);
+              usernameSearchRef.current.value = '';
+              setSearchQuery();
+            })
+            .catch(console.error)
+        } else {
+          setToastError('Solicitação já enviada para este usuário.');
+          closeModal();
+        }
       })
-      .catch(console.error)
   }
 
   return (
@@ -116,6 +124,7 @@ export default function AddFriendsModal({ isOpen, closeModal,  }) {
       </Modal>
       <Toast
         message={toastMessage}
+        error={toastError}
       />
     </div>
   )

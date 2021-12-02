@@ -14,12 +14,14 @@ import RoomUserService from "../../services/RoomUserService";
 import Chat from "../../components/Chat";
 import Head from "next/head";
 import AddFriendsModal from "../../components/AddFriendsModal";
+import CreateRoomModal from "../../components/CreateRoomModal";
 
 
 export default function Chats() {
   const { setCurrentUser, setIsLoading } = useAuthentication();
   const { setFriendships, setRoomUsers } = useChats();
   const [modalAddFriendsOpen, setModalAddFriendsOpen] = useState(false);
+  const [modalCreateRoomOpen, setModalCreateRoomOpen] = useState(false);
 
   useEffect(() => {
     const user = Cookies.get('user');
@@ -55,12 +57,19 @@ export default function Chats() {
       <Head>
         <title>Chats</title>
       </Head>
-      <Menu setModalAddFriendsOpen={setModalAddFriendsOpen} />
+      <Menu
+        setModalAddFriendsOpen={setModalAddFriendsOpen}
+        setModalCreateRoomOpen={setModalCreateRoomOpen}
+      />
       <ChatList />
       <Chat />
       <AddFriendsModal
         isOpen={modalAddFriendsOpen}
         closeModal={() => setModalAddFriendsOpen(false)}
+      />
+      <CreateRoomModal
+        isOpen={modalCreateRoomOpen}
+        closeModal={() => setModalCreateRoomOpen(false)}
       />
     </ChatGrid>
   );

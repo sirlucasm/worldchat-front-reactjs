@@ -17,6 +17,10 @@ class MyDocument extends Document {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin={true} />
           <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100&display=swap" rel="stylesheet" />
           <script src="https://kit.fontawesome.com/3f722b8912.js" crossOrigin={"anonymous"}></script>
+          <link
+            href="https://cdn.jsdelivr.net/npm/@tailwindcss/custom-forms@0.2.1/dist/custom-forms.css"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <Main />

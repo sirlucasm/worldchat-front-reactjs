@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useAuthentication } from "../../contexts/Authentication";
 import router from 'next/router';
 
-export default function Menu({ setModalAddFriendsOpen }) {
+export default function Menu({ setModalAddFriendsOpen, setModalCreateRoomOpen }) {
   const { currentUser } = useAuthentication();
 
   const redirectPage = (path) => {
@@ -31,12 +31,12 @@ export default function Menu({ setModalAddFriendsOpen }) {
           <Item onClick={() => setModalAddFriendsOpen(true)}>
             <i aria-hidden className="fas fa-user-plus"></i>
           </Item>
+          <Item onClick={() => setModalCreateRoomOpen(true)}>
+            <i aria-hidden className="fas fa-plus-circle"></i>
+          </Item>
         </UpsideItems>
 
         <DownsideItems>
-          <Item onClick={() => redirectPage('settings')}>
-            <i aria-hidden className="fas fa-cog"></i>
-          </Item>
           {
             currentUser?.profile_pic ?
             <div className="profile" onClick={() => redirectPage('profile')}>

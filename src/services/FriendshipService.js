@@ -17,6 +17,10 @@ class FriendshipService {
     return (await this.API.get('friendships/' + params.id)).data;
   }
 
+  async findFriendshipByUserId (params) {
+    return (await this.API.get('friendships/friend/' + params.id, { params: { currentUser: params.currentUser }})).data;
+  }
+
   async myFriends (currentUser) {
     var stored = JSON.parse(currentUser);
     return (await this.API.post('friendships/friends', { id: stored.id })).data;

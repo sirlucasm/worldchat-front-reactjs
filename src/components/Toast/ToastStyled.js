@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const MyToast = styled.div`
+  z-index: 999;
   position: absolute;
   top: 20px;
   right: 100px;
