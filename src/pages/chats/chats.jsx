@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuthentication } from "../../contexts/Authentication";
 import { useChats } from "../../contexts/Chat";
 import {
@@ -12,11 +12,14 @@ import ChatList from "../../components/ChatList";
 import FriendshipService from "../../services/FriendshipService";
 import RoomUserService from "../../services/RoomUserService";
 import Chat from "../../components/Chat";
+import Head from "next/head";
+import AddFriendsModal from "../../components/AddFriendsModal";
 
 
 export default function Chats() {
   const { setCurrentUser, setIsLoading } = useAuthentication();
   const { setFriendships, setRoomUsers } = useChats();
+  const [modalAddFriendsOpen, setModalAddFriendsOpen] = useState(false);
 
   useEffect(() => {
     const user = Cookies.get('user');
@@ -49,9 +52,16 @@ export default function Chats() {
 
   return (
     <ChatGrid>
-      <Menu />
+      <Head>
+        <title>Chats</title>
+      </Head>
+      <Menu setModalAddFriendsOpen={setModalAddFriendsOpen} />
       <ChatList />
       <Chat />
+      <AddFriendsModal
+        isOpen={modalAddFriendsOpen}
+        closeModal={() => setModalAddFriendsOpen(false)}
+      />
     </ChatGrid>
   );
 }

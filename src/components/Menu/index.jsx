@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { useAuthentication } from "../../contexts/Authentication";
 import router from 'next/router';
 
-export default function Menu() {
+export default function Menu({ setModalAddFriendsOpen }) {
   const { currentUser } = useAuthentication();
 
   const redirectPage = (path) => {
@@ -28,7 +28,7 @@ export default function Menu() {
           <Item onClick={() => redirectPage('chats')}>
             <i aria-hidden className="fas fa-comment-alt"></i>
           </Item>
-          <Item onClick={() => redirectPage('add-friend')}>
+          <Item onClick={() => setModalAddFriendsOpen(true)}>
             <i aria-hidden className="fas fa-user-plus"></i>
           </Item>
         </UpsideItems>

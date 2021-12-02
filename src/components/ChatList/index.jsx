@@ -7,18 +7,16 @@ import {
   PicArea,
   TitleArea,
 } from './styled';
-import Image from 'next/image';
 
 import { useAuthentication } from "../../contexts/Authentication";
 import { useChats } from "../../contexts/Chat";
-import router from 'next/router';
 
 export default function ChatList() {
-  const { currentUser, isLoading } = useAuthentication();
-  const { friendships, roomUsers, setSelectedChat } = useChats();
+  const { currentUser } = useAuthentication();
+  const { friendships, roomUsers, setSelectedChat, selectedChat } = useChats();
 
   const showFriendshipInfo = (friendship, key) => {
-    if (friendship.toUser.id != currentUser.id) {
+    if (friendship?.toUser.id != currentUser?.id) {
       return friendship.toUser[key];
     } else {
       return friendship.sendedBy[key];
@@ -38,7 +36,7 @@ export default function ChatList() {
           </ContentTitle>
           {
             friendships?.map((friendship, key) => (
-              <Lists key={key} onClick={() => setSelectedChat({ chat: friendship, type: 'friendship' })}>
+              <Lists key={key} onClick={() => !selectedChat && setSelectedChat({ chat: friendship, type: 'friendship' })} className={selectedChat && "disabled"}>
                 <PicArea src={friendship.toUser.profile_pic ? friendship.toUser.profile_pic : '/assets/icons/user.png'} alt="profile picture" />
                 <InfoArea>
                   <h3>{ showFriendshipInfo(friendship, 'username') }</h3>
@@ -55,7 +53,7 @@ export default function ChatList() {
           </ContentTitle>
           {
             roomUsers?.map((roomUser, key) => (
-              <Lists key={key} onClick={() => setSelectedChat({ chat: roomUser, type: 'room' })}>
+              <Lists key={key} onClick={() => !selectedChat && setSelectedChat({ chat: roomUser, type: 'room' })} className={selectedChat && "disabled"}>
                 <PicArea src={ roomUser.room.roomPic ? roomUser.room.roomPic : 'assets/icons/user.png' } alt="profile picture" />
                 <InfoArea>
                   <h3>{ roomUser.room.name }</h3>

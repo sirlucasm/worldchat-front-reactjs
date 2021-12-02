@@ -71,6 +71,21 @@ export default function MyChat() {
     }
   }
 
+  const fetchChats = (stored) => {
+    setIsLoading(true);
+    if (selectedChat.type === 'friendship') {
+      ChatService.myChats(stored, { toUserId: selectedChat.chat.toUser.id })
+        .then(_chats => {
+          setChats(_chats)
+          if (_chats) fetchChatMessages(_chats);
+        })
+        .catch(error => setError(error.response.data.message))
+        .finally(() => setIsLoading(false));
+    } else {
+      fetchRoomMessages();
+    }
+  }
+
   useEffect(() => {
     scrollToBottom();
   }, [chatMessages]);
@@ -78,20 +93,6 @@ export default function MyChat() {
   useEffect(() => {
     const user = Cookies.get('user');
 
-    const fetchChats = (stored) => {
-      setIsLoading(true);
-      if (selectedChat.type === 'friendship') {
-        ChatService.myChats(stored, { toUserId: selectedChat.chat.toUser.id })
-          .then(_chats => {
-            setChats(_chats)
-            if (_chats) fetchChatMessages(_chats);
-          })
-          .catch(error => setError(error.response.data.message))
-          .finally(() => setIsLoading(false));
-      } else {
-        fetchRoomMessages();
-      }
-    }
     fetchChats(user);
     const interval = setInterval(() => fetchChats(user), 6000);
 

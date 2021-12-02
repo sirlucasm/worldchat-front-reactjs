@@ -45,6 +45,13 @@ export const Lists = styled.div`
   &:hover {
     background-color: rgba(225, 232, 236, .676);
   }
+
+  &.disabled {
+    cursor: not-allowed;
+    &:hover {
+      background-color: transparent;
+    }
+  }
 `;
 
 export const PicArea = styled.img`

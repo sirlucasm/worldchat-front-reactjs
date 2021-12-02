@@ -20,6 +20,10 @@ class UserService {
     return (await this.API.get('users')).data;
   }
 
+  async searchUsers (param) {
+    return (await this.API.get('users/search', { params: { username: param.username }})).data;
+  }
+
   async login (params) {
     const user = (await this.API.post('users/login', params)).data;
     Cookie.set('user', JSON.stringify(user));
