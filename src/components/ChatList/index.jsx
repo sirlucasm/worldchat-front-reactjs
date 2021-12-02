@@ -13,7 +13,7 @@ import { useChats } from "../../contexts/Chat";
 
 export default function ChatList() {
   const { currentUser } = useAuthentication();
-  const { friendships, roomUsers, setSelectedChat, selectedChat } = useChats();
+  const { friendships, roomUsers, myRooms, setSelectedChat, selectedChat } = useChats();
 
   const showFriendshipInfo = (friendship, key) => {
     if (friendship?.toUser.id != currentUser?.id) {
@@ -49,7 +49,7 @@ export default function ChatList() {
 
         <ChatListContent className="scroll-design">
           <ContentTitle>
-            <h3>Salas ({ roomUsers?.length })</h3>
+            <h3>Salas ({ roomUsers?.length + myRooms.length })</h3>
           </ContentTitle>
           {
             roomUsers?.map((roomUser, key) => (
@@ -57,6 +57,16 @@ export default function ChatList() {
                 <PicArea src={ roomUser.room.roomPic ? roomUser.room.roomPic : 'assets/icons/user.png' } alt="profile picture" />
                 <InfoArea>
                   <h3>{ roomUser.room.name }</h3>
+                </InfoArea>
+              </Lists>
+            ))
+          }
+          {
+            myRooms?.map((myRoom, key) => (
+              <Lists key={key} onClick={() => !selectedChat && setSelectedChat({ chat: myRoom, type: 'room' })} className={selectedChat && "disabled"}>
+                <PicArea src={ myRoom.room.roomPic ? myRoom.room.roomPic : 'assets/icons/user.png' } alt="profile picture" />
+                <InfoArea>
+                  <h3>{ myRoom.room.name }</h3>
                 </InfoArea>
               </Lists>
             ))

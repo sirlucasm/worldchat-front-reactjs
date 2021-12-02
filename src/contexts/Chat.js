@@ -10,6 +10,7 @@ export default function ChatsProvider({ children }) {
   const [chatMessages, setChatMessages] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [roomMessages, setRoomMessages] = useState([]);
+  const [myRooms, setMyRooms] = useState([]);
 
   const closeChat = () => {
     setSelectedChat(undefined);
@@ -30,7 +31,9 @@ export default function ChatsProvider({ children }) {
     rooms,
     setRooms,
     roomMessages,
-    setRoomMessages
+    setRoomMessages,
+    myRooms,
+    setMyRooms
   }
 
   return (

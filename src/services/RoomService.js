@@ -15,7 +15,7 @@ class RoomService {
 
   async myRooms (currentUser) {
     var stored = JSON.parse(currentUser);
-    return (await this.API.get('rooms/my-rooms/' + stored.id)).data;
+    return (await this.API.get('rooms/my-rooms', { params: { id: stored.id }})).data;
   }
 
   async find (params) {

@@ -15,11 +15,12 @@ import Chat from "../../components/Chat";
 import Head from "next/head";
 import AddFriendsModal from "../../components/AddFriendsModal";
 import CreateRoomModal from "../../components/CreateRoomModal";
+import RoomService from "../../services/RoomService";
 
 
 export default function Chats() {
   const { setCurrentUser, setIsLoading } = useAuthentication();
-  const { setFriendships, setRoomUsers } = useChats();
+  const { setFriendships, setRoomUsers, setMyRooms } = useChats();
   const [modalAddFriendsOpen, setModalAddFriendsOpen] = useState(false);
   const [modalCreateRoomOpen, setModalCreateRoomOpen] = useState(false);
 
@@ -47,10 +48,29 @@ export default function Chats() {
         .finally(() => setIsLoading(false));
     }
 
+    const fetchMyRooms = (stored) => {
+      setIsLoading(true);
+      RoomService.myRooms(stored)
+        .then(_myRooms => {
+          const newRoomsList = [];
+          var room = {};
+          var user = {};
+          _myRooms?.map((data) => {
+            user = data.createdBy;
+            delete data.createdBy;
+            room = data;
+            newRoomsList.push({ room, user });
+          });
+          setMyRooms(newRoomsList);
+        })
+        .finally(() => setIsLoading(false));
+    }
+
     fetchCurrentUser(user);
     fetchFriendships(user);
     fetchRoomUsers(user);
-  }, [setCurrentUser, setFriendships, setIsLoading, setRoomUsers]);
+    fetchMyRooms(user);
+  }, [setCurrentUser, setFriendships, setIsLoading, setMyRooms, setRoomUsers]);
 
   return (
     <ChatGrid>

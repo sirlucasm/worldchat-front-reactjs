@@ -44,6 +44,7 @@ export default function CreateRoomModal({ isOpen, closeModal, }) {
           router.reload();
         }, 2000);
       })
+      .catch(() => setToastError('Não foi possível criar a sala. Revise os dados'));
   }
 
   return (
