@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import router from 'next/router';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -14,13 +15,19 @@ export default function AuthenticationProvider({ children }) {
     }
   }, [authenticated]);
 
+  const signOut = () => {
+    Cookies.remove('user');
+    router.replace('/');
+  }
+
   const props = {
     authenticated,
     setAuthenticated,
     currentUser,
     setCurrentUser,
     isLoading,
-    setIsLoading
+    setIsLoading,
+    signOut
   };
 
   return (

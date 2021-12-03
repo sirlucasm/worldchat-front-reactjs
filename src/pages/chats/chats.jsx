@@ -16,13 +16,15 @@ import Head from "next/head";
 import AddFriendsModal from "../../components/AddFriendsModal";
 import CreateRoomModal from "../../components/CreateRoomModal";
 import RoomService from "../../services/RoomService";
+import FriendRequestsModal from "../../components/FriendRequestsModal";
 
 
 export default function Chats() {
   const { setCurrentUser, setIsLoading } = useAuthentication();
-  const { setFriendships, setRoomUsers, setMyRooms } = useChats();
+  const { setFriendships, setRoomUsers, setMyRooms, setFriendRequests } = useChats();
   const [modalAddFriendsOpen, setModalAddFriendsOpen] = useState(false);
   const [modalCreateRoomOpen, setModalCreateRoomOpen] = useState(false);
+  const [modalFriendRequestsOpen, setModalFriendRequestsOpen] = useState(false);
 
   useEffect(() => {
     const user = Cookies.get('user');
@@ -31,6 +33,7 @@ export default function Chats() {
       setIsLoading(true);
       UserService.currentUser(stored)
         .then(_currentUser => setCurrentUser(_currentUser))
+        .catch(_ => _)
         .finally(() => setIsLoading(false));
     }
 
@@ -38,6 +41,7 @@ export default function Chats() {
       setIsLoading(true);
       FriendshipService.myFriends(stored)
         .then(_friendships => setFriendships(_friendships))
+        .catch(_ => _)
         .finally(() => setIsLoading(false));
     }
 
@@ -45,6 +49,7 @@ export default function Chats() {
       setIsLoading(true);
       RoomUserService.roomsImIn(stored)
         .then(_roomUsers => setRoomUsers(_roomUsers))
+        .catch(_ => _)
         .finally(() => setIsLoading(false));
     }
 
@@ -63,6 +68,15 @@ export default function Chats() {
           });
           setMyRooms(newRoomsList);
         })
+        .catch(_ => _)
+        .finally(() => setIsLoading(false));
+    }
+
+    const fetchFriendRequests = (stored) => {
+      setIsLoading(true);
+      FriendshipService.findFriendRequests(stored)
+        .then(_friendRequests => setFriendRequests(_friendRequests))
+        .catch(_ => _)
         .finally(() => setIsLoading(false));
     }
 
@@ -70,7 +84,8 @@ export default function Chats() {
     fetchFriendships(user);
     fetchRoomUsers(user);
     fetchMyRooms(user);
-  }, [setCurrentUser, setFriendships, setIsLoading, setMyRooms, setRoomUsers]);
+    fetchFriendRequests(user);
+  }, [setCurrentUser, setFriendRequests, setFriendships, setIsLoading, setMyRooms, setRoomUsers]);
 
   return (
     <ChatGrid>
@@ -80,6 +95,7 @@ export default function Chats() {
       <Menu
         setModalAddFriendsOpen={setModalAddFriendsOpen}
         setModalCreateRoomOpen={setModalCreateRoomOpen}
+        setModalFriendRequestsOpen={setModalFriendRequestsOpen}
       />
       <ChatList />
       <Chat />
@@ -90,6 +106,10 @@ export default function Chats() {
       <CreateRoomModal
         isOpen={modalCreateRoomOpen}
         closeModal={() => setModalCreateRoomOpen(false)}
+      />
+      <FriendRequestsModal
+        isOpen={modalFriendRequestsOpen}
+        closeModal={() => setModalFriendRequestsOpen(false)}
       />
     </ChatGrid>
   );

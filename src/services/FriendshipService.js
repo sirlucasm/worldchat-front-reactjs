@@ -21,13 +21,18 @@ class FriendshipService {
     return (await this.API.get('friendships/friend/' + params.id, { params: { currentUser: params.currentUser }})).data;
   }
 
+  async findFriendRequests (currentUser) {
+    var stored = JSON.parse(currentUser);
+    return (await this.API.get('friendships/friend-requests', { params: { currentUser: stored.id }})).data;
+  }
+
   async myFriends (currentUser) {
     var stored = JSON.parse(currentUser);
     return (await this.API.post('friendships/friends', { id: stored.id })).data;
   }
 
-  async update (params) {
-    return (await this.API.put('friendships', params)).data;
+  async acceptFriendRequest (params, friendRequestId) {
+    return (await this.API.patch('friendships/' + friendRequestId, params)).data;
   }
 
   async deleteFriendship (params) {

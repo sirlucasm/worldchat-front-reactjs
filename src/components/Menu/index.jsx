@@ -10,8 +10,8 @@ import Image from 'next/image';
 import { useAuthentication } from "../../contexts/Authentication";
 import router from 'next/router';
 
-export default function Menu({ setModalAddFriendsOpen, setModalCreateRoomOpen }) {
-  const { currentUser } = useAuthentication();
+export default function Menu({ setModalAddFriendsOpen, setModalCreateRoomOpen, setModalFriendRequestsOpen }) {
+  const { currentUser, signOut } = useAuthentication();
 
   const redirectPage = (path) => {
     router.push(path);
@@ -34,6 +34,9 @@ export default function Menu({ setModalAddFriendsOpen, setModalCreateRoomOpen })
           <Item onClick={() => setModalCreateRoomOpen(true)}>
             <i aria-hidden className="fas fa-plus-circle"></i>
           </Item>
+          <Item onClick={() => setModalFriendRequestsOpen(true)}>
+            <i aria-hidden className="fas fa-user-friends"></i>
+          </Item>
         </UpsideItems>
 
         <DownsideItems>
@@ -47,7 +50,9 @@ export default function Menu({ setModalAddFriendsOpen, setModalCreateRoomOpen })
                 <i aria-hidden className="fas fa-user"></i>
               </Item>
           }
-
+          <Item onClick={signOut}>
+            <i aria-hidden className="fas fa-sign-out-alt"></i>
+          </Item>
         </DownsideItems>
       </MenuItems>
     </MyMenu>

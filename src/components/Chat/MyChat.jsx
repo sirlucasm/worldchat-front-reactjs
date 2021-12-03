@@ -38,14 +38,14 @@ export default function MyChat() {
 
   const fetchChatMessages = (chat) => {
     ChatMessageService.messages({ chatId: chat[0].id })
-      .then(_messages => setChatMessages(_messages));
+      .then(_messages => setChatMessages(_messages))
+      .catch(_ => setChatMessages([]));
   }
 
   const fetchRoomMessages = () => {
     RoomMessageService.messagesByRoom({ roomId: selectedChat.chat.room.id })
       .then(_roomMessages => setRoomMessages(_roomMessages))
-      .catch(_ => _)
-      .finally(() => setIsLoading(false));
+      .catch(_ => setRoomMessages([]))
   }
 
   const sendMessage = async () => {

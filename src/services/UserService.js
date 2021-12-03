@@ -1,4 +1,5 @@
 import API from '../settings/axios';
+import Cookies from 'js-cookie';
 
 class UserService {
   constructor () {
@@ -7,7 +8,7 @@ class UserService {
 
   async createAccount (params) {
     const user = (await this.API.post('users', params)).data;
-    Cookie.set('user', JSON.stringify(user));
+    Cookies.set('user', JSON.stringify(user));
     return user;
   }
 
@@ -26,7 +27,7 @@ class UserService {
 
   async login (params) {
     const user = (await this.API.post('users/login', params)).data;
-    Cookie.set('user', JSON.stringify(user));
+    Cookies.set('user', JSON.stringify(user));
     return user;
   }
 
